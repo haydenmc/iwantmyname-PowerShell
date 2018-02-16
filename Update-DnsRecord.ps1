@@ -35,7 +35,7 @@ param(
 $ApiUri = "https://iwantmyname.com/basicauth/ddns"
 
 # Fetch the IP from the given adapter
-$IpAddress = Get-NetIPAddress | Where-Object InterfaceAlias -ieq "External" | Where-Object AddressFamily -ieq $AddressFamily |`
+$IpAddress = Get-NetIPAddress | Where-Object InterfaceAlias -ieq $InterfaceAlias | Where-Object AddressFamily -ieq $AddressFamily |`
     Where-Object SuffixOrigin -ine "Link" | Select-Object -Index 0 | Select-Object -ExpandProperty "IPAddress"
 
 # Make cred
