@@ -35,8 +35,14 @@ param(
 $ApiUri = "https://iwantmyname.com/basicauth/ddns"
 
 # Fetch the IP from the given adapter
-$IpAddress = Get-NetIPAddress | Where-Object InterfaceAlias -ieq $InterfaceAlias | Where-Object AddressFamily -ieq $AddressFamily |`
-    Where-Object SuffixOrigin -ine "Link" | Select-Object -Index 0 | Select-Object -ExpandProperty "IPAddress"
+$IpAddress = Get-NetIPAddress |`
+    Where-Object InterfaceAlias -ieq $InterfaceAlias |`
+    Where-Object AddressFamily -ieq $AddressFamily |`
+    Where-Object PrefixOrigin -ine "WellKnown" |`
+    Where-Object SuffixOrigin -ine "Link" |`
+    Where-Object AddressState -ieq "Preferred" |`
+    Select-Object -Index 0 |`
+    Select-Object -ExpandProperty "IPAddress"
 
 # Make cred
 $securePassword = ConvertTo-SecureString -String $Password -AsPlainText -Force
@@ -48,6 +54,6 @@ $body = "hostname=$Hostname&type=$RecordType&value=$IpAddress"
 # Send request (this should throw on a non-success case)
 Write-Host -ForegroundColor Cyan "Setting '$RecordType' on '$Hostname' to '$IpAddress' ..."
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-$request = Invoke-WebRequest -Method "POST" -Credential $cred -Uri $ApiUri -Body $body -ErrorAction Stop
+$request = Invoke-WebRequest -Method "POST" -Credential $cred -Uri $ApiUri -Body $body -UseBasicParsing -ErrorAction Stop
 Write-Host -ForegroundColor Green "$($request.StatusCode) $($request.StatusMessage)"
 Write-Host $(([char[]]$request.Content) -join "")
