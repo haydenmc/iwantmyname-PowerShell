@@ -19,3 +19,8 @@ This uses the only DNS API provided by iwantmyname, find the documentation for i
 
 It would be *awesome* if they provided an API that used API keys or something instead of basic auth with your account username and password.
 But oh well. I guess this is what we have to work with.
+
+### To add a scheduled task:
+Simply open `taskschd.msc` and add a task to launch a program with the following:
+- File: `powershell.exe`
+- Arguments: `-ExecutionPolicy Bypass -File C:\Path\To\Update-DnsRecord.ps1 -AddressFamily IPv6 -InterfaceAlias "Your Network Interface" -Hostname "your.domain.here" -RecordType "AAAA" -Username "your@username.com" -Password "hunter2"`
