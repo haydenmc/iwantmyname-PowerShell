@@ -38,9 +38,8 @@ $ApiUri = "https://iwantmyname.com/basicauth/ddns"
 $IpAddress = Get-NetIPAddress |`
     Where-Object InterfaceAlias -ieq $InterfaceAlias |`
     Where-Object AddressFamily -ieq $AddressFamily |`
-    Where-Object PrefixOrigin -ine "WellKnown" |`
-    Where-Object SuffixOrigin -ine "Link" |`
     Where-Object AddressState -ieq "Preferred" |`
+    Where-Object PrefixOrigin -ine "WellKnown" |`
     Select-Object -Index 0 |`
     Select-Object -ExpandProperty "IPAddress"
 
